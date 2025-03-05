@@ -23,13 +23,13 @@ interface TableMusicProps {
   musics: PlayListMusicInterface[];
 }
 
-const addMusic = () => {
+const delMusic = () => {
   console.log('===addMusic==');
 };
 
 const menu = (
   <Menu>
-    <Menu.Item key="1" onClick={addMusic}>
+    <Menu.Item key="1" onClick={delMusic}>
       <FontAwesomeIcon icon={faRemove} size="1x" style={{ color: '#b3b3b3' }} />
       ลบออกจากคอลเลกชันของคุณ
     </Menu.Item>

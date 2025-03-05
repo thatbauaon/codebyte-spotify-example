@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from '@/lib/redux/store';
 
 import { Flex, Button, Row, Tooltip, Input } from 'antd';
 import { DatabaseFilled } from '@ant-design/icons';
@@ -10,7 +11,6 @@ import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { SearchOutlined } from '@ant-design/icons';
 import PlaylistItem from './play-list-Item';
 import { addPlayList, fetchPlayList } from '@/lib/redux/slices/playList';
-import { AppDispatch } from '@/lib/redux/store';
 
 const SplitterFirstComponent: React.FC = () => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -58,7 +58,7 @@ const SplitterFirstComponent: React.FC = () => {
 					<Input placeholder="ค้นหาคอลเลคชั่นของคุณ" prefix={<SearchOutlined />} />
 				</Flex>
 			</div>
-			<div>
+			<div style={{ flex: 1, overflowY: 'auto', maxHeight: 'calc(100vh - 150px)', paddingBottom: '10px' }}>
 				<PlaylistItem />
 			</div>
 		</Flex>

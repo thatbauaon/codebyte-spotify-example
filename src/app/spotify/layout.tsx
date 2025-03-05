@@ -32,7 +32,7 @@ export default function MemberLayout({ children }: { readonly children: React.Re
 
                     <Splitter style={{ height: '100vh', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }} >
                         <Splitter.Panel defaultSize="20%" min="18%" max="70%" >
-                            <Flex justify="start" align="start" style={{ height: '100%' }} className="bg-[#121212] p-2 rounded-lg">
+                            <Flex justify="start" align="start" style={{ height: '100%' }} className="bg-[#121212] p-2 rounded-lg pb-200">
                                 <SplitterFirstComponent />
                             </Flex>
                         </Splitter.Panel>
@@ -45,7 +45,7 @@ export default function MemberLayout({ children }: { readonly children: React.Re
                         </Splitter.Panel>
                     </Splitter>
                 </Content>
-                <Footer className="bg-[#000000] z-10">
+                <Footer className="bg-[#000000]">
                     <BtnPlay />
                 </Footer>
             </Layout>

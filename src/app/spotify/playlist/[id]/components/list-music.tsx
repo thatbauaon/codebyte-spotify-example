@@ -1,19 +1,28 @@
 'use client';
 
 import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from '@/lib/redux/store';
+
 import { Avatar, Button, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPlus, faEllipsis, faRemove } from '@fortawesome/free-solid-svg-icons';
 import TableMusic from './table-music';
-import { PlayListMusicInterface } from '../page';
+import { PlayListDetailInterface, PlayListMusicInterface } from '../page';
+import { delPlayList, fetchPlayList } from '@/lib/redux/slices/playList';
 
 interface ListMusicProps {
   musics: PlayListMusicInterface[];
+  playlist: PlayListDetailInterface;
 }
 
-const ListMusic: React.FC<ListMusicProps> = ({ musics }) => {
-  const onRemove = () => {
+const ListMusic: React.FC<ListMusicProps> = ({ musics, playlist }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onRemove = async () => {
     console.log('===addPlaylist==');
+    await dispatch(delPlayList(playlist?.id)).unwrap();
+    dispatch(fetchPlayList("/playlist"));
   };
 
   const menu = (

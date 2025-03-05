@@ -2,11 +2,15 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from '@/lib/redux/store';
+import { Album, Music } from '@/lib/redux/slices/album';
+import { addPlayList, fetchPlayList } from '@/lib/redux/slices/playList';
+
 import { Avatar, Button, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPlus, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import TableMusic from './table-music';
-import { Album, Music } from '@/lib/redux/slices/album';
 
 interface ListMusicProps {
   album: Album;
@@ -14,13 +18,27 @@ interface ListMusicProps {
 }
 
 const ListMusic: React.FC<ListMusicProps> = ({ musics, album }) => {
-  const addPlaylist = () => {
-    console.log('===addPlaylist==', album);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleAddPlaylist = async () => {
+    try {
+      const newPlaylist = {
+        name: album.name,
+        image: album.image,
+        musics: musics.length,
+      };
+
+      await dispatch(addPlayList(newPlaylist)).unwrap();
+      dispatch(fetchPlayList("/playlist"));
+    } catch (error) {
+      console.error(error);
+    }
   };
+
 
   const menu = (
     <Menu>
-      <Menu.Item key="1" onClick={addPlaylist}>
+      <Menu.Item key="1" onClick={handleAddPlaylist}>
         <FontAwesomeIcon icon={faPlus} size="1x" style={{ color: '#b3b3b3' }} />
         เพิ่มลงในคอลเลกชันของคุณ
       </Menu.Item>

@@ -39,7 +39,7 @@ export default function SpotifyDetailPage({ params }: { params: { id: string } }
   return (
     <div className="flex flex-col w-full">
       <TitleList playlist={playlist} />
-      <ListMusic musics={playlistMusic} />
+      <ListMusic playlist={playlist} musics={playlistMusic} />
     </div>
   );
 }

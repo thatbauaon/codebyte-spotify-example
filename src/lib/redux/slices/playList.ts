@@ -31,6 +31,11 @@ interface DataState {
     loading: boolean;
     error: string | null;
   };
+  delData: {
+    data: string;
+    loading: boolean;
+    error: string | null;
+  };
 }
 
 // สร้าง initial state
@@ -41,6 +46,11 @@ const initialState: DataState = {
     error: null,
   },
   addData: {
+    data: '',
+    loading: false,
+    error: null,
+  },
+  delData: {
     data: '',
     loading: false,
     error: null,
@@ -59,7 +69,7 @@ export const fetchPlayList = createAsyncThunk(
     if (!data.success) {
       throw new Error(data.message || "Failed to fetch data");
     }
-    return data.data.play_lists as PlayListInterface[]; // ส่งเฉพาะ result.data ไปเก็บใน Redux state
+    return data.data.play_lists as PlayListInterface[];
   }
 );
 
@@ -76,7 +86,23 @@ export const addPlayList = createAsyncThunk(
     if (!data.success) {
       throw new Error(data.message || "Failed to add playlist");
     }
-    return data.message; // ส่งข้อมูล playlist ที่เพิ่มสำเร็จกลับไปเก็บใน Redux state
+    return data.message;
+  }
+);
+
+export const delPlayList = createAsyncThunk(
+  "data/delPlayList",
+  async (playlistId: string) => {
+    const response = await fetch(`/api/data?pathUrl=${encodeURIComponent(`/playlist/${playlistId}`)}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error(data.message || "Failed to delete playlist");
+    }
+    return data.message;
   }
 );
 
@@ -86,7 +112,6 @@ const playListSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // **GET** Fetch PlayList
       .addCase(fetchPlayList.pending, (state) => {
         state.fetchData.loading = true;
         state.fetchData.error = null;
@@ -99,8 +124,6 @@ const playListSlice = createSlice({
         state.fetchData.loading = false;
         state.fetchData.error = action.error.message || "Something went wrong";
       })
-
-      // **POST** Add PlayList
       .addCase(addPlayList.pending, (state) => {
         state.addData.loading = true;
         state.addData.error = null;
@@ -112,6 +135,18 @@ const playListSlice = createSlice({
       .addCase(addPlayList.rejected, (state, action) => {
         state.addData.loading = false;
         state.addData.error = action.error.message || "Something went wrong";
+      })
+      .addCase(delPlayList.pending, (state) => {
+        state.delData.loading = true;
+        state.delData.error = null;
+      })
+      .addCase(delPlayList.fulfilled, (state, action) => {
+        state.delData.loading = false;
+        state.delData.data = action.payload;
+      })
+      .addCase(delPlayList.rejected, (state, action) => {
+        state.delData.loading = false;
+        state.delData.error = action.error.message || "Something went wrong";
       });
   },
 });
