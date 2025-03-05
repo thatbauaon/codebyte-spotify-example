@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+.custom-sider .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.custom-sider .ant-menu {
+  flex: 0; /* ทำให้เมนูด้านบนขยายเต็ม */
+}
+
+.custom-sider .bottom-menu {
+  margin-top: auto; /* ดันเมนูด้านล่างไปชิดขอบล่าง */
+}
+
+.ant-layout-content {
+  background-color: black;
+}
+
+/* ซ่อน scrollbar ในทั้งแนวนอน */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* styles/globals.css */
+.carousel-container {
+  padding: 20px;
+  background: #000;
+}
+
+.playlist-card {
+  text-align: center;
+  background: #111;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.playlist-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.playlist-card h3 {
+  color: #fff;
+  margin-top: 10px;
+}
+
+/* ปรับสีลูกศรซ้าย */
+.swiper-button-prev {
+  color: red !important;
+}
+
+/* ปรับสีลูกศรขวา */
+.swiper-button-next {
+  color: red !important;
+}
+
+/* เพิ่มความใหญ่ให้ลูกศรถ้าต้องการ */
+.swiper-button-prev, .swiper-button-next {
+  font-size: 2rem;
+}
+
+/* ปิดการเปลี่ยนแปลงสีพื้นหลังเมื่อ hover บนเซลล์ */
+.td:hover {
+  background-color: transparent !important; /* ไม่ให้พื้นหลังเปลี่ยนเมื่อ hover */
+  color: inherit !important; /* ไม่ให้สีข้อความเปลี่ยน */
+}
+
+table:hover,
+tr:hover,
+thead:hover {
+    background: #121212 !important;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+    background: none !important;
+}
+
+:where(.css-dev-only-do-not-override-1v613y0).ant-table-wrapper .ant-table-tbody >tr >th, :where(.css-dev-only-do-not-override-1v613y0).ant-table-wrapper .ant-table-tbody >tr >td {
+  border-bottom: none;
+}
+
+/* กำหนดให้กับทุกเซลล์ในแถวแรก */
+.css-dev-only-do-not-override-1v613y0 .ant-table-wrapper .ant-table-container table > thead > tr:first-child > * {
+  border-start-start-radius: 0px;
+}
+
+:where(.css-dev-only-do-not-override-1v613y0).ant-table-wrapper .ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before,
+:where(.css-dev-only-do-not-override-1v613y0).ant-table-wrapper .ant-table-thead > tr > td:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+  background-color: transparent !important; /* ลบสีพื้นหลัง */
+}
+
+/* Disable hover effect on the button */
+.ant-btn:hover {
+  background-color: #1f1f1f !important;  /* Ensure it stays the same as the normal state */
+  border-color: #1f1f1f !important;     /* Ensure the border color remains the same */
+}
