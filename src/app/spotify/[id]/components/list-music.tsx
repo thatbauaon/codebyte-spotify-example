@@ -6,10 +6,16 @@ import { Avatar, Button, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPlus, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import TableMusic from './table-music';
+import { Album, Music } from '@/lib/redux/slices/album';
 
-const ListMusic = () => {
+interface ListMusicProps {
+  album: Album;
+  musics: Music[];
+}
+
+const ListMusic: React.FC<ListMusicProps> = ({ musics, album }) => {
   const addPlaylist = () => {
-    console.log('===addPlaylist==');
+    console.log('===addPlaylist==', album);
   };
 
   const menu = (
@@ -45,7 +51,7 @@ const ListMusic = () => {
         </div>
       </div>
       <div>
-        <TableMusic />
+        <TableMusic musics={musics} />
       </div>
     </>
   );

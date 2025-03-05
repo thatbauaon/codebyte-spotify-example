@@ -9,8 +9,9 @@ import { ClockCircleOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPlus, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { Avatar, Button, Dropdown, Menu } from 'antd';
+import { Music } from '@/lib/redux/slices/album';
 
-interface DataType {
+interface MusicType {
   key: string;
   name: string;
   album: string;
@@ -18,43 +19,9 @@ interface DataType {
   time: string;
 }
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    album: 'John Brown',
-    date: '',
-    time: 'John Brown',
-  },
-  {
-    key: '2',
-    name: 'John Brown',
-    album: 'John Brown',
-    date: '',
-    time: 'John Brown',
-  },
-  {
-    key: '3',
-    name: 'John Brown',
-    album: 'John Brown',
-    date: '',
-    time: 'John Brown',
-  },
-  {
-    key: '4',
-    name: 'John Brown',
-    album: 'John Brown',
-    date: '',
-    time: 'John Brown',
-  },
-  {
-    key: '5',
-    name: 'John Brown',
-    album: 'John Brown',
-    date: '',
-    time: 'John Brown',
-  },
-];
+interface TableMusicProps {
+  musics: Music[];
+}
 
 const addMusic = () => {
   console.log('===addMusic==');
@@ -70,7 +37,7 @@ const menu = (
 );
 
 
-const columns: TableProps<DataType>['columns'] = [
+const columns: TableProps<MusicType>['columns'] = [
   {
     title: '#',
     dataIndex: 'key',
@@ -102,27 +69,36 @@ const columns: TableProps<DataType>['columns'] = [
     dataIndex: 'time',
     key: 'time',
     width: 150,
-    render: (text) => <div className='flex flex-row'>
-      <a>{'-:--'}
+    render: (text) => (
+      <div className="flex flex-row items-center">
+        <span>{text}</span>
         <Dropdown overlay={menu} trigger={['click']}>
           <Button
             type="primary"
             shape="circle"
             icon={<FontAwesomeIcon icon={faEllipsis} size="1x" />}
-            className="mx-4"
-            style={{ backgroundColor: 'transparent', border: 'none', color: 'none', boxShadow: 'none' }}
+            className="ml-4"
+            style={{ backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }}
           />
         </Dropdown>
-      </a>
-    </div>,
-  },
+      </div>
+    ),
+  }
 
 ];
 
-const TableMusic: React.FC = () => {
+const TableMusic: React.FC<TableMusicProps> = ({ musics }) => {
+  const data: MusicType[] = musics.map((music, index) => ({
+    key: String(index + 1),
+    name: music.mu_name,
+    album: music.al_name,
+    date: new Date(music.mu_created_at).toLocaleDateString(),
+    time: `${music.mu_music_time.minutes}:${music.mu_music_time.seconds.toString().padStart(2, '0')}`,
+  }));
+
   return (
     <div className="">
-      <Table<DataType>
+      <Table<MusicType>
         columns={columns}
         dataSource={data}
         className="bg-transparent"

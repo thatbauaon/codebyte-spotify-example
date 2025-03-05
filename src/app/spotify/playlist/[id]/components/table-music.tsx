@@ -30,10 +30,9 @@ const addMusic = () => {
 const menu = (
   <Menu>
     <Menu.Item key="1" onClick={addMusic}>
-      <FontAwesomeIcon icon={faPlus} size="1x" style={{ color: '#b3b3b3' }} />
-      เพิ่มลงในคอลเลกชันของคุณ
+      <FontAwesomeIcon icon={faRemove} size="1x" style={{ color: '#b3b3b3' }} />
+      ลบออกจากคอลเลกชันของคุณ
     </Menu.Item>
-    
   </Menu>
 );
 

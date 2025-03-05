@@ -1,5 +1,10 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from '@/lib/redux/store';
+import { fetchAlbum } from '@/lib/redux/slices/album';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -7,15 +12,12 @@ import { Navigation } from 'swiper/modules';
 import CardAlbum from './card-album';
 
 const MusicCarousel = () => {
-  const playlists = [
-    { title: 'ป้าง นครินทร์', img: '/images/pang.jpg' },
-    { title: 'ชิลล์ ฟูลส์', img: '/images/chillfools.jpg' },
-    { title: 'Bruno Mars', img: '/images/bruno.jpg' },
-    { title: 'Jeff Satur', img: '/images/jeff.jpg' },
-    { title: 'Ariana Grande', img: '/images/ariana.jpg' },
-    { title: 'Illslick', img: '/images/illslick.jpg' },
-    { title: 'PUN', img: '/images/pun.jpg' },
-  ];
+  const dispatch = useDispatch<AppDispatch>();
+  const { data, loading, error } = useSelector((state: RootState) => state.album.albums);
+
+  useEffect(() => {
+    dispatch(fetchAlbum());
+  }, [dispatch]);
 
   return (
     <div className="carousel-container">
@@ -30,9 +32,9 @@ const MusicCarousel = () => {
           1024: { slidesPerView: 6 },
         }}
       >
-        {playlists.map((playlist, index) => (
+        {data.length > 0 && data.map((item, index) => (
           <SwiperSlide key={index}>
-            <CardAlbum />
+            <CardAlbum album={item} />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import dataReducer from "./slices/dataSlice";
 import logger from "redux-logger"; // Import redux-logger
 import playListReducer from "./slices/playList";
+import albumReducer from "./slices/album";
 
 export const store = configureStore({
   reducer: {
     data: dataReducer,
     playList: playListReducer, 
+    album: albumReducer, 
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger), // Add redux-logger as middleware
 });

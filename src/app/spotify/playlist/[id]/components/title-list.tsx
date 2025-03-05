@@ -20,9 +20,13 @@ const TitleList: React.FC<TitleListProps> = ({ playlist }) => {
     <div className="w-full h-[250px] bg-gradient-to-b from-[#e35d5b] to-[#a04744] p-6 flex items-center rounded-t-lg">
       <div className="relative">
         <img
-          className="w-[150px] h-[150px] rounded-lg shadow-lg"
+          alt={playlist.image}
           src={playlist.image}
-          alt={playlist.name}
+          className="w-[150px] h-[150px] rounded-lg shadow-lg"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = '/images/placeholder.jpg';
+          }}
         />
       </div>
 

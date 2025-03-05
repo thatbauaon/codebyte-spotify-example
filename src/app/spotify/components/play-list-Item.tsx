@@ -3,15 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
+import { AppDispatch, RootState } from '@/lib/redux/store';
 
 import { Avatar } from 'antd';
 
 import { PushpinFilled } from "@ant-design/icons";
 import { fetchPlayList } from '@/lib/redux/slices/playList';
-import { AppDispatch, RootState } from '@/lib/redux/store';
 
 const PlaylistItem = () => {
-    const router = useRouter();
+  const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
   const { data, loading, error } = useSelector((state: RootState) => state.playList.fetchData);

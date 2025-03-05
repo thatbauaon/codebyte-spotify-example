@@ -25,13 +25,12 @@ const SplitterFirstComponent: React.FC = () => {
 			};
 
 			await dispatch(addPlayList(newPlaylist)).unwrap();
-			console.log("✅ Playlist added successfully!");
 			dispatch(fetchPlayList("/playlist"));
 		} catch (error) {
-			console.error("❌ Failed to add playlist:", error);
+			console.error(error);
 		}
 	};
-	
+
 	return (
 		<Flex vertical style={{ width: '100%' }}> {/* ✅ ใช้ Flex แนวตั้ง */}
 			<Flex style={boxStyle} justify={'space-between'} align={'flex-start'}>
