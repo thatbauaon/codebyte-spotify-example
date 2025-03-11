@@ -1,35 +1,39 @@
 "use server";
+
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { NextResponse } from 'next/server';
 
-const config = {
-  maxAge: 60 * 60 * 24 * 7, // 1 week
-  path: "/",
-  domain: process.env.HOST ?? "localhost",
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-};
-
-export async function POST(request: Request) {
-  const { username, password } = await request.json();
-
-  // จำลองการเชื่อมต่อกับ API หรือฐานข้อมูล
+export async function login(values: { email: string; password: string, role: string, firebase: string }) {
   try {
-    // ตัวอย่างการตรวจสอบ username และ password
-    if (username === 'test' && password === 'password123') {
-      // จำลองการส่ง response หลังจาก login สำเร็จ
-      return NextResponse.json({
-        data: {
-          token: 'sample-token',
-          firstLogin: false,
-        },
-      });
-    } else {
-      // หากข้อมูลไม่ถูกต้อง
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+
+    const response = await fetch(`${process.env.API_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Login failed");
     }
+
+    // ✅ แปลง token เป็น string เพื่อความปลอดภัย
+    const token = String(data.token);
+
+    // ✅ แก้ไข sameSite เป็น "strict"
+    cookies().set("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      path: "/",
+    });
+
+    // Server-side redirection after successful login
+    return { success: true };
+
   } catch (error) {
-    return NextResponse.json({ error: 'An error occurred during login' }, { status: 500 });
+    console.error('==[error]==')
+    console.error(error)
+    return { error: error instanceof Error ? error.message : "An error occurred" };
   }
 }

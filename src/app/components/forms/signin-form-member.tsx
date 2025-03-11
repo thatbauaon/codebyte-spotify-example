@@ -1,87 +1,75 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Checkbox, Form, Input, message } from 'antd';
-import type { FormProps } from 'antd';
+import { Button, Checkbox, Form, Input, message } from "antd";
+import type { FormProps } from "antd";
+import { login } from "@/app/data/actions/auth-actions";
 
 type FieldType = {
   username?: string;
   password?: string;
-  remember?: string;
+  remember?: boolean;
 };
 
 export function SigninFormMember() {
   const router = useRouter();
-
   const [form] = Form.useForm();
+  const [isPending, startTransition] = useTransition();
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-    console.log('Success:', values);
+  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+    setErrorMessage(""); // ล้าง error message
 
-    // ส่งข้อมูลไปที่ API route
-    try {
-      const response = await fetch('/api/data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),  // ส่งข้อมูล username และ password
+    startTransition(async () => {
+      const result = await login({
+        email: values.username as string,
+        password: values.password as string,
+        role: "MEMBER",
+        firebase: "ss",
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // หาก login สำเร็จ
-        message.success('Login successful!');
-        // เก็บ token หรือทำการ redirect ตามที่ต้องการ
-        localStorage.setItem("token", data.token);
-        router.push("/member");  // หรือหน้าอื่นๆ ตามต้องการ
+      
+      // ถ้าไม่มี error ให้ redirect ด้วย client side
+      if (!result?.error) {
+        router.push("/members");
       } else {
-        // หาก login ไม่สำเร็จ
-        console.error('========error====1===')
-        message.error(data.error || 'Login failed!');
+        setErrorMessage(result.error);
+        message.error(result.error);
       }
-    } catch (error) {
-      console.error('========error====2===')
-      console.error('Error occurred during login:', error);
-      message.error('An error occurred while trying to log in.');
-    }
-  };
-  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    });
   };
 
   return (
     <Form
-      layout='vertical'
+      layout="vertical"
       form={form}
       initialValues={{ remember: true }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <Form.Item<FieldType>
         label="Username"
         name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={[{ required: true, message: "Please input your username!" }]}
       >
-        <Input placeholder="input placeholder" />
+        <Input placeholder="Enter your username" />
       </Form.Item>
       <Form.Item<FieldType>
         label="Password"
         name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
+        rules={[{ required: true, message: "Please input your password!" }]}
       >
-        <Input.Password />
+        <Input.Password placeholder="Enter your password" />
       </Form.Item>
-      <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
+      <Form.Item<FieldType> name="remember" valuePropName="checked">
         <Checkbox>Remember me</Checkbox>
       </Form.Item>
 
-      <Form.Item label={null}>
-        <Button type="primary" htmlType="submit">
-          Submit
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit" loading={isPending}>
+          {isPending ? "Logging in..." : "Submit"}
         </Button>
       </Form.Item>
     </Form>
