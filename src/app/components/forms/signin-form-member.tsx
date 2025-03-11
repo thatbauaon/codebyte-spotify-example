@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import type { FormProps } from "antd";
 import { login } from "@/app/data/actions/auth-actions";
+
 
 type FieldType = {
   username?: string;
@@ -17,6 +18,8 @@ export function SigninFormMember() {
   const [form] = Form.useForm();
   const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState("");
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get('returnTo') || '/members';
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     setErrorMessage(""); // ล้าง error message
@@ -31,7 +34,8 @@ export function SigninFormMember() {
       
       // ถ้าไม่มี error ให้ redirect ด้วย client side
       if (!result?.error) {
-        router.push("/members");
+        router.push(returnTo);
+        // router.push("/members");
       } else {
         setErrorMessage(result.error);
         message.error(result.error);

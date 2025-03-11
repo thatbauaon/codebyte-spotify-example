@@ -22,6 +22,7 @@ export async function login(values: { email: string; password: string, role: str
 
     // ✅ แก้ไข sameSite เป็น "strict"
     cookies().set("token", token, {
+      maxAge: 60 * 60 * 24 * 7, // 1 week
       httpOnly: true,
       secure: true,
       sameSite: "strict",
